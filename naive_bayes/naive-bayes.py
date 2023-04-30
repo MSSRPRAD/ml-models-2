@@ -25,7 +25,7 @@ data = data.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 data['fnlwgt'] = pd.cut(data['fnlwgt'], 5,labels=["1", "2", "3", "4", "5"])
 # data.drop(['fnlwgt'], axis=1,inplace=True)
 data['capital-gain'] = pd.cut(data['capital-gain'], 5,labels=["1", "2", "3", "4", "5"])
-data['capital-loss'] = pd.cut(data['capital-loss'], 5,labels=["1", "2", "3", "4", "5"])
+data['capital-loss'] = pd.cut(data['capital-loss'], 3,labels=["1", "2", "3"])
 data['hours-per-week'] = pd.cut(data['hours-per-week'], 5,labels=["1", "2", "3", "4", "5"])
 # data.drop(['fnlwgt', 'capital-gain', 'capital-loss', 'hours-per-week'], inplace=True, axis=1)
 

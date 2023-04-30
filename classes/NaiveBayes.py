@@ -10,7 +10,7 @@ class NaiveBayes:
     pass
 
   def calc_prior_prob(self, y):
-      self.priors = y.groupby(y).count().add(50).div(len(y))
+      self.priors = y.groupby(y).count().add(250).div(len(y))
       self.class1 = y.groupby(y).count()[0]
       self.class2 = y.groupby(y).count()[1]
       return  
@@ -25,6 +25,7 @@ class NaiveBayes:
         self.cond_prob_of_feature[col] = train.groupby(['salary', col]).size()
         self.cond_prob_of_feature[col]/=len(train)
         self.cond_prob_of_feature[col]/=self.priors
+      print(self.cond_prob_of_feature)
       return
   
   
