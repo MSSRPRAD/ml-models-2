@@ -10,7 +10,7 @@ import sys
 sys.path.append("..")
 import pandas as pd
 import numpy as np
-from classes.classes import NaiveBayes
+from classes.NaiveBayes import NaiveBayes
 
 column_names = ["age", "workclass", "fnlwgt", "education", "education-num", "marital-status", "occupation", "relationship", "race", "sex", "capital-gain", "capital-loss", "hours-per-week", "native-country", "salary"]
 
@@ -22,11 +22,12 @@ replace_values = {" <=50K":"1", " >=50K":"-1", " >50K":"-1", " <50K":"1"}
 data['salary'] = data['salary'].replace(replace_values)
 # strip whitespace before and after first and last character for all columns
 data = data.applymap(lambda x: x.strip() if isinstance(x, str) else x)
-# data['fnlwgt'] = pd.cut(data['fnlwgt'], 5,labels=["1", "2", "3", "4", "5"])
-# data['capital-gain'] = pd.cut(data['capital-gain'], 5,labels=["1", "2", "3", "4", "5"])
-# data['capital-loss'] = pd.cut(data['capital-loss'], 5,labels=["1", "2", "3", "4", "5"])
-# data['hours-per-week'] = pd.cut(data['hours-per-week'], 5,labels=["1", "2", "3", "4", "5"])
-data.drop(['fnlwgt', 'capital-gain', 'capital-loss', 'hours-per-week'], inplace=True, axis=1)
+data['fnlwgt'] = pd.cut(data['fnlwgt'], 5,labels=["1", "2", "3", "4", "5"])
+# data.drop(['fnlwgt'], axis=1,inplace=True)
+data['capital-gain'] = pd.cut(data['capital-gain'], 5,labels=["1", "2", "3", "4", "5"])
+data['capital-loss'] = pd.cut(data['capital-loss'], 5,labels=["1", "2", "3", "4", "5"])
+data['hours-per-week'] = pd.cut(data['hours-per-week'], 5,labels=["1", "2", "3", "4", "5"])
+# data.drop(['fnlwgt', 'capital-gain', 'capital-loss', 'hours-per-week'], inplace=True, axis=1)
 
 # replace '?' with NaN
 data = data.replace('?', np.nan)

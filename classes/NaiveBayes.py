@@ -10,7 +10,7 @@ class NaiveBayes:
     pass
 
   def calc_prior_prob(self, y):
-      self.priors = y.groupby(y).count().div(len(y))
+      self.priors = y.groupby(y).count().add(50).div(len(y))
       self.class1 = y.groupby(y).count()[0]
       self.class2 = y.groupby(y).count()[1]
       return  
@@ -41,11 +41,11 @@ class NaiveBayes:
     count=0
     for i in x.index:
       if(x[count] not in self.cond_prob_of_feature[i]['-1']):
-          prob_class1 *= 0.0001  
+          prob_class1 *= 0.001  
       else:
           prob_class1 *= self.cond_prob_of_feature[i]['-1'][x[count]]
       if(x[count] not in self.cond_prob_of_feature[i]['1']):
-          prob_class2 *= 0.0001  
+          prob_class2 *= 0.001  
       else:
           prob_class2 *= self.cond_prob_of_feature[i]['1'][x[count]]
       count+=1
