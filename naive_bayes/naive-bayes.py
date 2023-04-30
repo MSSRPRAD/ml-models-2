@@ -11,6 +11,9 @@ sys.path.append("..")
 import pandas as pd
 import numpy as np
 from classes.NaiveBayes import NaiveBayes
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 
 column_names = ["age", "workclass", "fnlwgt", "education", "education-num", "marital-status", "occupation", "relationship", "race", "sex", "capital-gain", "capital-loss", "hours-per-week", "native-country", "salary"]
 
@@ -25,7 +28,7 @@ data = data.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 data['fnlwgt'] = pd.cut(data['fnlwgt'], 5,labels=["1", "2", "3", "4", "5"])
 # data.drop(['fnlwgt'], axis=1,inplace=True)
 data['capital-gain'] = pd.cut(data['capital-gain'], 5,labels=["1", "2", "3", "4", "5"])
-data['capital-loss'] = pd.cut(data['capital-loss'], 3,labels=["1", "2", "3"])
+data['capital-loss'] = pd.cut(data['capital-loss'], 2,labels=["1", "2"])
 data['hours-per-week'] = pd.cut(data['hours-per-week'], 5,labels=["1", "2", "3", "4", "5"])
 # data.drop(['fnlwgt', 'capital-gain', 'capital-loss', 'hours-per-week'], inplace=True, axis=1)
 
@@ -41,13 +44,15 @@ train = train.drop(['salary'], axis=1)
 
 naive_bayes = NaiveBayes()
 naive_bayes.fit(train, y)
-naive_bayes.priors
-
-naive_bayes.class1, naive_bayes.class2
 
 test_y = test['salary']
 test = test.drop(['salary'], axis=1)
 
-
-
-print(1.0-naive_bayes.accuracy(test, test_y))
+naive_bayes.test(test, test_y)
+metrics = [naive_bayes.acc, naive_bayes.prec, naive_bayes.rec]
+metrics = pd.Series(metrics,index=['Accuracy','Precision','Recall'])
+print(metrics)
+metrics.to_csv("./data/naive-bayes/metrics.csv", header=False)
+confusion = naive_bayes.confusion
+confusion = pd.DataFrame(confusion)
+confusion.to_csv("./data/naive-bayes/confusion.csv")

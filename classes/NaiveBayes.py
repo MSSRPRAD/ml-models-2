@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.metrics import confusion_matrix
 
 class NaiveBayes:
   def __init__(self):
@@ -7,6 +8,15 @@ class NaiveBayes:
     self.cond_prob_of_feature = None
     self.class1 = None
     self.class2 = None
+    self.y_pred = None
+    self.con = None
+    self.acc = None
+    self.prec = None
+    self.rec= None
+    self.truepositives = None
+    self.falsepositives = None
+    self.truenegatives = None
+    self.falsenegatives = None
     pass
 
   def calc_prior_prob(self, y):
@@ -22,10 +32,9 @@ class NaiveBayes:
       for col in train.columns:
         if i%1000==0 and i!=0:
            print(i)
-        self.cond_prob_of_feature[col] = train.groupby(['salary', col]).size()
+        self.cond_prob_of_feature[col] = train.groupby(['salary', col]).size().add(0)
         self.cond_prob_of_feature[col]/=len(train)
         self.cond_prob_of_feature[col]/=self.priors
-      print(self.cond_prob_of_feature)
       return
   
   
@@ -64,13 +73,46 @@ class NaiveBayes:
       if i%1000==0:
         print("Percentage Predicted:")
         print(i/10000)
-      predictions.append(self.classify(X.iloc[i, :]))
+      predictions.append(str(self.classify(X.iloc[i, :])))
     return predictions
+  
+  def test(self, X, y):
+    self.y_pred = self.predict(X)
+    self.acc = self.accuracy(y)
+    self.prec = self.precision(y)
+    # self.rec = self.recall(y)
+    self.con = self.confusion(y)
 
-  def accuracy(self, X, y):
-    predictions = self.predict(X)
+  def precision(self, y):
+        precision = 0
+        count = 0
+        for i in range(len(self.y_pred)):
+            if self.y_pred[i]=="-1":
+                if y.iloc[i]=="-1":
+                    precision+=1
+                count+=1
+        return precision/count
+
+  def confusion(self, y):
+    return confusion_matrix(y_true=y, y_pred=self.y_pred)
+  
+  def recall(self, y):
+    recall = 0
+    count = 0
+    for i in range(len(self.y_pred)):
+      if y.iloc[i]=="-1":
+        if self.y_pred[i]=="-1":
+          recall+=1
+          count+=1
+        else:
+          count+=1
+      return recall/count
+
+  def accuracy(self, y):
     misclassifications = 0
-    for i in range(len(predictions)):
-      if str(predictions[i]) != str(y.iloc[i]):
-        misclassifications += 1
-    return misclassifications/len(predictions)
+    for i in range(len(self.y_pred)):
+      if str(self.y_pred[i]) != str(y.iloc[i]):
+        misclassifications += 1  
+
+    return 1-misclassifications/len(self.y_pred)
+    
