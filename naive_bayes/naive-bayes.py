@@ -15,6 +15,7 @@ from classes.Preprocessor import Preprocessing
 from classes.Metrics import Metrics
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
 
 
 column_names = ["age", "workclass", "fnlwgt", "education", "education-num", "marital-status", "occupation", "relationship", "race", "sex", "capital-gain", "capital-loss", "hours-per-week", "native-country", "salary"]
@@ -65,11 +66,7 @@ Metrics = Metrics(predicted, test_y)
 metrics = [Metrics.accuracy(), Metrics.recall(), Metrics.precision(), 2*(Metrics.precision()*Metrics.precision())/(Metrics.precision()+Metrics.precision())]
 metrics = pd.Series(metrics,index=['Accuracy','Precision','Recall', 'F1'])
 metrics.to_csv("./data/naive-bayes/modified-metrics.csv", header=False)
-# metrics = [naive_bayes.acc, naive_bayes.prec, naive_bayes.rec, 2*(naive_bayes.prec*naive_bayes.rec)/(naive_bayes.prec+naive_bayes.rec)]
-# metrics = pd.Series(metrics,index=['Accuracy','Precision','Recall', 'F1'])
-# print(metrics)
-# metrics.to_csv("./data/naive-bayes/metrics.csv", header=False)
-# confusion = naive_bayes.con
-# print(confusion)
-# confusion = pd.DataFrame(confusion)
-# confusion.to_csv("./data/naive-bayes/confusion.csv", header=False)
+confusion = confusion_matrix(test_y, predicted)
+print(confusion)
+confusion = pd.DataFrame(confusion)
+confusion.to_csv("./data/naive-bayes/confusion.csv", header=False)
