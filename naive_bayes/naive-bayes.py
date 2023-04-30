@@ -11,14 +11,15 @@ sys.path.append("..")
 import pandas as pd
 import numpy as np
 from classes.NaiveBayes import NaiveBayes
+from classes.Preprocessor import Preprocessing
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 
 column_names = ["age", "workclass", "fnlwgt", "education", "education-num", "marital-status", "occupation", "relationship", "race", "sex", "capital-gain", "capital-loss", "hours-per-week", "native-country", "salary"]
-
+print("---------------------loading data---------------------")
 data = pd.read_csv("adult.csv", names=column_names)
-
+print("---------------------preprocessing data---------------------")
 replace_values = {" <=50K":"1", " >=50K":"-1", " >50K":"-1", " <50K":"1"}
 # data.drop(['fnlwgt'], axis=1, inplace=True)
 
@@ -37,22 +38,25 @@ data = data.replace('?', np.nan)
 data.isna().sum().sum()
 data.dropna(inplace=True)
 
-train = data.iloc[:20100, :]
-test = data.iloc[20101:, :]
+Preprocessing = Preprocessing()
+train,test = Preprocessing.train_test_split(data)
 y = train['salary']
 train = train.drop(['salary'], axis=1)
-
-naive_bayes = NaiveBayes()
-naive_bayes.fit(train, y)
-
 test_y = test['salary']
 test = test.drop(['salary'], axis=1)
+print("---------------------Making the model---------------------")
+naive_bayes = NaiveBayes()
+print("---------------------fitting our training data---------------------")
 
+naive_bayes.fit(train, y)
+
+print("---------------------predicting---------------------")
 naive_bayes.test(test, test_y)
-metrics = [naive_bayes.acc, naive_bayes.prec, naive_bayes.rec]
-metrics = pd.Series(metrics,index=['Accuracy','Precision','Recall'])
+metrics = [naive_bayes.acc, naive_bayes.prec, naive_bayes.rec, 2*(naive_bayes.prec*naive_bayes.rec)/(naive_bayes.prec+naive_bayes.rec)]
+metrics = pd.Series(metrics,index=['Accuracy','Precision','Recall', 'F1'])
 print(metrics)
 metrics.to_csv("./data/naive-bayes/metrics.csv", header=False)
-confusion = naive_bayes.confusion
+confusion = naive_bayes.con
+print(confusion)
 confusion = pd.DataFrame(confusion)
-confusion.to_csv("./data/naive-bayes/confusion.csv")
+confusion.to_csv("./data/naive-bayes/confusion.csv", header=False)
