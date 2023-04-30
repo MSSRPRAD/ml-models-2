@@ -14,8 +14,8 @@ class Metrics:
         precision = 0
         count = 0
         for i in range(self.y_pred.shape[0]):
-            if self.y_pred[i]=="1":
-                if self.y_test[i]=="1":
+            if self.y_pred[i]==1:
+                if self.y_test[i]==1:
                     precision+=1
                 count+=1
         return precision/count
@@ -24,8 +24,8 @@ class Metrics:
         recall = 0
         count = 0
         for i in range(self.y_pred.shape[0]):
-            if self.y_test[i]=="1":
-                if self.y_pred[i]=="1":
+            if self.y_test[i]==1:
+                if self.y_pred[i]==1:
                     recall+=1
                     count+=1
                 else:

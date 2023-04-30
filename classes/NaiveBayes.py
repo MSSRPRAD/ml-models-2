@@ -28,7 +28,7 @@ class NaiveBayes:
       for col in train.columns:
         if i%1000==0 and i!=0:
            print(i)
-        self.cond_prob_of_feature[col] = train.groupby(['salary', col]).size()
+        self.cond_prob_of_feature[col] = train.groupby(['salary', col]).size().add(0)
         self.cond_prob_of_feature[col]/=len(train)
         self.cond_prob_of_feature[col]/=self.priors
       return

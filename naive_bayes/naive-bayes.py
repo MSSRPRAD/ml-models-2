@@ -12,6 +12,7 @@ import pandas as pd
 import numpy as np
 from classes.NaiveBayes import NaiveBayes
 from classes.Preprocessor import Preprocessing
+from classes.Metrics import Metrics
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -52,11 +53,23 @@ naive_bayes.fit(train, y)
 
 print("---------------------predicting---------------------")
 naive_bayes.test(test, test_y)
-metrics = [naive_bayes.acc, naive_bayes.prec, naive_bayes.rec, 2*(naive_bayes.prec*naive_bayes.rec)/(naive_bayes.prec+naive_bayes.rec)]
+predicted = naive_bayes.y_pred
+# Convert the array of strings to integers using map and int functions
+predicted = list(map(int, predicted))
+test_y = list(map(int, test_y))
+predicted = np.array(predicted)
+test_y = np.array(test_y)
+print(type(predicted))
+print(type(test_y))
+Metrics = Metrics(predicted, test_y)
+metrics = [Metrics.accuracy(), Metrics.recall(), Metrics.precision(), 2*(Metrics.precision()*Metrics.precision())/(Metrics.precision()+Metrics.precision())]
 metrics = pd.Series(metrics,index=['Accuracy','Precision','Recall', 'F1'])
-print(metrics)
-metrics.to_csv("./data/naive-bayes/metrics.csv", header=False)
-confusion = naive_bayes.con
-print(confusion)
-confusion = pd.DataFrame(confusion)
-confusion.to_csv("./data/naive-bayes/confusion.csv", header=False)
+metrics.to_csv("./data/naive-bayes/modified-metrics.csv", header=False)
+# metrics = [naive_bayes.acc, naive_bayes.prec, naive_bayes.rec, 2*(naive_bayes.prec*naive_bayes.rec)/(naive_bayes.prec+naive_bayes.rec)]
+# metrics = pd.Series(metrics,index=['Accuracy','Precision','Recall', 'F1'])
+# print(metrics)
+# metrics.to_csv("./data/naive-bayes/metrics.csv", header=False)
+# confusion = naive_bayes.con
+# print(confusion)
+# confusion = pd.DataFrame(confusion)
+# confusion.to_csv("./data/naive-bayes/confusion.csv", header=False)
