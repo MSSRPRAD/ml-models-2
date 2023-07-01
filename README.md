@@ -5,7 +5,7 @@ The code for the assignment can be found in the git repository at https://github
 # ML Models
 
 Code for the First Assignment of the Machine Learning Course (2023 - Sem 2) Assignments.
-Have Implemented Different ML Models using numpy and pandas.
+Have Implemented Different ML Models using numpy and pandas (and keras for neural networks).
 
 Course Name: Machine Learning    
 
@@ -19,6 +19,6 @@ Members:
 3) Jatin Jindal
 
 Description:
-- Implementation of Various Machine Learning Models
-- Using Numpy and Pandas
+- Implementation of Various Machine Learning Models.
+- Using Numpy, Pandas and Keras (for neural netowrks only).
 - Models implemented: Naive Bayes, Artificial Neural Networks 
